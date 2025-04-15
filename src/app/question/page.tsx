@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
@@ -17,18 +18,22 @@ export default function QuestionPage() {
   const questionIndex = searchParams.get("question");
 
   useEffect(() => {
-    if (round && categoryIndex && questionIndex) {
-      let question;
-      if (round === "round1") {
-        question = categoriesRound1[parseInt(categoryIndex)].questions[parseInt(questionIndex)];
-      } else if (round === "round2") {
-        question = categoriesRound2[parseInt(categoryIndex)].questions[parseInt(questionIndex)];
-      }
+    try {
+      if (round && categoryIndex && questionIndex) {
+        let question;
+        if (round === "round1") {
+          question = categoriesRound1[parseInt(categoryIndex)].questions[parseInt(questionIndex)];
+        } else if (round === "round2") {
+          question = categoriesRound2[parseInt(categoryIndex)].questions[parseInt(questionIndex)];
+        }
 
-      if (question) {
-        setQuestionText(question.text);
-        setAnswerText(question.answer);
+        if (question) {
+          setQuestionText(question.text);
+          setAnswerText(question.answer);
+        }
       }
+    } catch (error: any) {
+      console.error("Error in QuestionPage useEffect:", error);
     }
   }, [round, categoryIndex, questionIndex]);
 

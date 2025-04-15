@@ -152,10 +152,10 @@ body {
 }
 
 .points-button.disabled {
-  background: #808080;
-  color: #555;
-  text-decoration: line-through;
-  cursor: not-allowed;
+    background: #808080 !important;
+    color: #555 !important;
+    text-decoration: line-through !important;
+    cursor: not-allowed !important;
 }
 
 .points-grid {

@@ -18,22 +18,37 @@ export default function QuestionPage() {
   const questionIndex = searchParams.get("question");
 
   useEffect(() => {
-    try {
-      if (round && categoryIndex && questionIndex) {
-        let question;
-        if (round === "round1") {
-          question = categoriesRound1[parseInt(categoryIndex)].questions[parseInt(questionIndex)];
-        } else if (round === "round2") {
-          question = categoriesRound2[parseInt(categoryIndex)].questions[parseInt(questionIndex)];
-        }
+    if (!round || !categoryIndex || !questionIndex) {
+      return;
+    }
 
+    const categoryIndexNum = parseInt(categoryIndex, 10);
+    const questionIndexNum = parseInt(questionIndex, 10);
+
+    let questions;
+    if (round === "round1") {
+      questions = categoriesRound1;
+    } else if (round === "round2") {
+      questions = categoriesRound2;
+    }
+
+    if (questions) {
+      const category = questions[categoryIndexNum];
+      if (category && category.questions) {
+        const question = category.questions[questionIndexNum];
         if (question) {
           setQuestionText(question.text);
           setAnswerText(question.answer);
+        } else {
+          console.warn("Question not found");
+          setQuestionText("Question not found");
+          setAnswerText("");
         }
+      } else {
+        console.warn("Category not found");
+        setQuestionText("Category not found");
+        setAnswerText("");
       }
-    } catch (error: any) {
-      console.error("Error in QuestionPage useEffect:", error);
     }
   }, [round, categoryIndex, questionIndex]);
 

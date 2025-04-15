@@ -16,7 +16,7 @@ export default function Round2() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-center min-h-screen fade-in">
       <h1 className="text-4xl font-bold mb-8">Раунд 2</h1>
       <div className="grid grid-cols-5 gap-4">
         {categoriesRound2.map((category, categoryIndex) => (
@@ -25,7 +25,7 @@ export default function Round2() {
             {category.questions.map((question, questionIndex) => (
               <Button
                 key={questionIndex}
-                className="mb-2"
+                className="mb-2 button"
                 onClick={() => handleQuestionClick(categoryIndex, questionIndex)}
               >
                 {question.points}
@@ -34,7 +34,7 @@ export default function Round2() {
           </div>
         ))}
       </div>
-      <Button className="mt-8" onClick={handleBack}>
+      <Button className="mt-8 button" onClick={handleBack}>
         Вернуться
       </Button>
     </div>

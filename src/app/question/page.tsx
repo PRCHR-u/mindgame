@@ -94,12 +94,12 @@ export default function QuestionPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-center min-h-screen fade-in">
       <h1 className="text-4xl font-bold mb-8">Вопрос</h1>
-      <div className="text-2xl font-semibold mb-4">{questionText}</div>
+      <div className="text-2xl font-semibold mb-4 question-text">{questionText}</div>
       <div className="text-xl mb-4">Осталось времени: {timeLeft} секунд</div>
       {!showAnswer && (
-        <Button className="mb-4" onClick={handleShowAnswer} disabled={timeLeft === 0}>
+        <Button className="mb-4 button" onClick={handleShowAnswer} disabled={timeLeft === 0}>
           Показать ответ
         </Button>
       )}
@@ -108,7 +108,7 @@ export default function QuestionPage() {
           Ответ: {answerText}
         </div>
       )}
-      <Button onClick={handleBack}>Вернуться</Button>
+      <Button className="button" onClick={handleBack}>Вернуться</Button>
     </div>
   );
 }

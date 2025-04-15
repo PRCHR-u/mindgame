@@ -20,7 +20,7 @@ export default function FinalRound() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-yellow-500">
+    <div className="flex flex-col items-center justify-center min-h-screen fade-in">
       <h1 className="text-5xl font-bold mb-8">Финальный Раунд</h1>
       <div className="mb-4">
         <label htmlFor="stake" className="block text-lg font-semibold mb-2">
@@ -34,9 +34,9 @@ export default function FinalRound() {
           onChange={(e) => setStake(e.target.value)}
         />
       </div>
-      <div className="text-2xl font-semibold mb-4">{finalQuestion.text}</div>
+      <div className="text-2xl font-semibold mb-4 question-text">{finalQuestion.text}</div>
       {!showAnswer && (
-        <Button className="mb-4" onClick={handleShowAnswer}>
+        <Button className="mb-4 button" onClick={handleShowAnswer}>
           Показать ответ
         </Button>
       )}
@@ -45,7 +45,7 @@ export default function FinalRound() {
           Ответ: {finalQuestion.answer}
         </div>
       )}
-      <Button onClick={handleBack}>Вернуться</Button>
+      <Button className="button" onClick={handleBack}>Вернуться</Button>
     </div>
   );
 }

@@ -3,11 +3,15 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { categoriesRound1 } from "@/lib/questions";
+import { useState } from "react";
 
 export default function Round1() {
   const router = useRouter();
+  const [clickedQuestions, setClickedQuestions] = useState<{[key: string]: boolean}>({});
 
   const handleQuestionClick = (categoryIndex: number, questionIndex: number) => {
+    const key = `${categoryIndex}-${questionIndex}`;
+    setClickedQuestions(prev => ({ ...prev, [key]: true }));
     router.push(`/question?round=round1&category=${categoryIndex}&question=${questionIndex}`);
   };
 
@@ -22,15 +26,23 @@ export default function Round1() {
         {categoriesRound1.map((category, categoryIndex) => (
           <div key={categoryIndex} className="flex flex-col">
             <h2 className="text-lg font-semibold mb-2">{category.name}</h2>
-            {category.questions.map((question, questionIndex) => (
-              <Button
-                key={questionIndex}
-                className="mb-2 button bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => handleQuestionClick(categoryIndex, questionIndex)}
-              >
-                {question.points}
-              </Button>
-            ))}
+            {category.questions.map((question, questionIndex) => {
+              const key = `${categoryIndex}-${questionIndex}`;
+              const isClicked = clickedQuestions[key] || false;
+
+              return (
+                <Button
+                  key={questionIndex}
+                  className={`mb-2 button text-white font-bold py-2 px-4 rounded ${
+                    isClicked ? "line-through opacity-50 cursor-not-allowed" : "bg-green-500 hover:bg-green-700"
+                  }`}
+                  onClick={() => handleQuestionClick(categoryIndex, questionIndex)}
+                  disabled={isClicked}
+                >
+                  {question.points}
+                </Button>
+              );
+            })}
           </div>
         ))}
       </div>
@@ -40,4 +52,3 @@ export default function Round1() {
     </div>
   );
 }
-

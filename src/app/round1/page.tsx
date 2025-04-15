@@ -25,7 +25,7 @@ export default function Round1() {
             {category.questions.map((question, questionIndex) => (
               <Button
                 key={questionIndex}
-                className="mb-2 button"
+                className="mb-2 button bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                 onClick={() => handleQuestionClick(categoryIndex, questionIndex)}
               >
                 {question.points}

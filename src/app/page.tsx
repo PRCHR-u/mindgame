@@ -54,6 +54,9 @@ export default function Home() {
   const router = useRouter();
 
   const handleStartGame = () => {
+    // Clear local storage
+    localStorage.removeItem('clickedQuestionsRound1');
+    localStorage.removeItem('clickedQuestionsRound2');
     router.push("/roundselection");
   };
 

@@ -3,11 +3,24 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { categoriesRound1 } from "@/lib/questions";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Round1() {
   const router = useRouter();
   const [clickedQuestions, setClickedQuestions] = useState<{[key: string]: boolean}>({});
+
+    useEffect(() => {
+        // Load clicked questions from localStorage on component mount
+        const storedClickedQuestions = localStorage.getItem('clickedQuestionsRound1');
+        if (storedClickedQuestions) {
+            setClickedQuestions(JSON.parse(storedClickedQuestions));
+        }
+    }, []);
+
+    useEffect(() => {
+        // Save clicked questions to localStorage whenever it changes
+        localStorage.setItem('clickedQuestionsRound1', JSON.stringify(clickedQuestions));
+    }, [clickedQuestions]);
 
   const handleQuestionClick = (categoryIndex: number, questionIndex: number) => {
     const key = `${categoryIndex}-${questionIndex}`;
@@ -22,30 +35,28 @@ export default function Round1() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen fade-in">
       <h1 className="text-4xl font-bold mb-8">Раунд 1</h1>
-      <div className="grid grid-cols-5 gap-4">
-        {categoriesRound1.map((category, categoryIndex) => (
-          <div key={categoryIndex} className="flex flex-col">
-            <h2 className="text-lg font-semibold mb-2">{category.name}</h2>
-            {category.questions.map((question, questionIndex) => {
-              const key = `${categoryIndex}-${questionIndex}`;
-              const isClicked = clickedQuestions[key] || false;
-
-              return (
-                <Button
-                  key={questionIndex}
-                  className={`mb-2 button text-white font-bold py-2 px-4 rounded ${
-                    isClicked ? "line-through opacity-50 cursor-not-allowed" : "bg-green-500 hover:bg-green-700"
-                  }`}
-                  onClick={() => handleQuestionClick(categoryIndex, questionIndex)}
-                  disabled={isClicked}
-                >
-                  {question.points}
-                </Button>
-              );
-            })}
-          </div>
-        ))}
-      </div>
+        <div className="grid grid-cols-5 gap-4 p-4">
+            {categoriesRound1.map((category, categoryIndex) => (
+                <div key={categoryIndex} className="flex flex-col items-center">
+                    <h2 className="text-lg font-semibold mb-2">{category.name}</h2>
+                    {category.questions.map((question, questionIndex) => {
+                        const key = `${categoryIndex}-${questionIndex}`;
+                        const isClicked = clickedQuestions[key] || false;
+                        return (
+                            <Button
+                                key={questionIndex}
+                                className={`points-button ${isClicked ? "disabled" : ""}`}
+                                onClick={() => handleQuestionClick(categoryIndex, questionIndex)}
+                                disabled={isClicked}
+                                aria-label={`Вопрос за ${question.points} баллов, категория ${category.name}`}
+                            >
+                                {question.points}
+                            </Button>
+                        );
+                    })}
+                </div>
+            ))}
+        </div>
       <Button className="mt-8 button" onClick={handleBack}>
         Вернуться
       </Button>

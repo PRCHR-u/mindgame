@@ -25,14 +25,14 @@ export default function Round2() {
 
     const handleQuestionClick = (categoryIndex: number, questionIndex: number) => {
         const key = `${categoryIndex}-${questionIndex}`;
+          // Optimistically update state immediately
+        setClickedQuestions(prev => ({ ...prev, [key]: true }));
+
         // Store the key in localStorage
         let storedClickedQuestions = localStorage.getItem('clickedQuestionsRound2');
         let clickedQuestionsRound2 = storedClickedQuestions ? JSON.parse(storedClickedQuestions) : {};
         clickedQuestionsRound2[key] = true;
         localStorage.setItem('clickedQuestionsRound2', JSON.stringify(clickedQuestionsRound2));
-
-        // Update state immediately
-        setClickedQuestions(prev => ({ ...prev, [key]: true }));
 
         router.push(`/question?round=round2&category=${categoryIndex}&question=${questionIndex}`);
     };
@@ -75,4 +75,3 @@ export default function Round2() {
     </div>
   );
 }
-

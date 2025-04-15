@@ -25,14 +25,14 @@ export default function Round2() {
 
     const handleQuestionClick = (categoryIndex: number, questionIndex: number) => {
         const key = `${categoryIndex}-${questionIndex}`;
-        // Update state immediately
-        setClickedQuestions(prev => ({ ...prev, [key]: true }));
-
         // Store the key in localStorage
         let storedClickedQuestions = localStorage.getItem('clickedQuestionsRound2');
         let clickedQuestionsRound2 = storedClickedQuestions ? JSON.parse(storedClickedQuestions) : {};
         clickedQuestionsRound2[key] = true;
         localStorage.setItem('clickedQuestionsRound2', JSON.stringify(clickedQuestionsRound2));
+
+        // Update state immediately
+        setClickedQuestions(prev => ({ ...prev, [key]: true }));
 
         router.push(`/question?round=round2&category=${categoryIndex}&question=${questionIndex}`);
     };
@@ -50,8 +50,7 @@ export default function Round2() {
                     <h2 className="text-lg font-semibold mb-2">{category.name}</h2>
                     {category.questions.map((question, questionIndex) => {
                         const key = `${categoryIndex}-${questionIndex}`;
-                         const storedClickedQuestions = localStorage.getItem('clickedQuestionsRound2');
-                         const isClicked = storedClickedQuestions ? JSON.parse(storedClickedQuestions)[key] || false : false;
+                         const isClicked = clickedQuestions[key] || false;
                         return (
                             <Button
                                 key={questionIndex}

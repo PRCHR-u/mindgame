@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { categoriesRound1 } from "@/lib/questions";
 import { useState, useEffect } from "react";
-import {Lock} from "lucide-react";
+import { Lock } from "lucide-react";
 
 export default function Round1() {
   const router = useRouter();
@@ -24,17 +24,17 @@ export default function Round1() {
     }, [clickedQuestions]);
 
     const handleQuestionClick = (categoryIndex: number, questionIndex: number) => {
-        const key = `${categoryIndex}-${questionIndex}`;
-        // Update state immediately
-        setClickedQuestions(prev => ({ ...prev, [key]: true }));
+      const key = `${categoryIndex}-${questionIndex}`;
+      // Store the key in localStorage
+      let storedClickedQuestions = localStorage.getItem('clickedQuestionsRound1');
+      let clickedQuestionsRound1 = storedClickedQuestions ? JSON.parse(storedClickedQuestions) : {};
+      clickedQuestionsRound1[key] = true;
+      localStorage.setItem('clickedQuestionsRound1', JSON.stringify(clickedQuestionsRound1));
 
-        // Store the key in localStorage
-        let storedClickedQuestions = localStorage.getItem('clickedQuestionsRound1');
-        let clickedQuestionsRound1 = storedClickedQuestions ? JSON.parse(storedClickedQuestions) : {};
-        clickedQuestionsRound1[key] = true;
-        localStorage.setItem('clickedQuestionsRound1', JSON.stringify(clickedQuestionsRound1));
+      // Update state immediately
+      setClickedQuestions(prev => ({ ...prev, [key]: true }));
 
-        router.push(`/question?round=round1&category=${categoryIndex}&question=${questionIndex}`);
+      router.push(`/question?round=round1&category=${categoryIndex}&question=${questionIndex}`);
     };
 
   const handleBack = () => {
@@ -50,8 +50,7 @@ export default function Round1() {
                     <h2 className="text-lg font-semibold mb-2">{category.name}</h2>
                     {category.questions.map((question, questionIndex) => {
                         const key = `${categoryIndex}-${questionIndex}`;
-                        const storedClickedQuestions = localStorage.getItem('clickedQuestionsRound1');
-                        const isClicked = storedClickedQuestions ? JSON.parse(storedClickedQuestions)[key] || false : false;
+                        const isClicked = clickedQuestions[key] || false;
                         return (
                             <Button
                                 key={questionIndex}

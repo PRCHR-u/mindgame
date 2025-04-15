@@ -1,4 +1,4 @@
-/ src/lib/questions.ts
+// src/lib/questions.ts
 
 export const categoriesRound1 = [
   {

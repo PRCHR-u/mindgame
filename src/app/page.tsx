@@ -59,7 +59,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold mb-8">Философская Викторина</h1>
+      <h1 className="text-4xl font-bold mb-8">Своя игра</h1>
       <Button className="w-64 mb-4 text-lg font-semibold" onClick={handleStartGame}>
         Начать игру
       </Button>

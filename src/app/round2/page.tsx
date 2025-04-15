@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { categoriesRound2 } from "@/lib/questions";
 import { useState, useEffect } from "react";
+import {Lock} from "lucide-react";
 
 export default function Round2() {
   const router = useRouter();
@@ -24,7 +25,15 @@ export default function Round2() {
 
     const handleQuestionClick = (categoryIndex: number, questionIndex: number) => {
         const key = `${categoryIndex}-${questionIndex}`;
+        // Update state immediately
         setClickedQuestions(prev => ({ ...prev, [key]: true }));
+
+        // Store the key in localStorage
+        let storedClickedQuestions = localStorage.getItem('clickedQuestionsRound2');
+        let clickedQuestionsRound2 = storedClickedQuestions ? JSON.parse(storedClickedQuestions) : {};
+        clickedQuestionsRound2[key] = true;
+        localStorage.setItem('clickedQuestionsRound2', JSON.stringify(clickedQuestionsRound2));
+
         router.push(`/question?round=round2&category=${categoryIndex}&question=${questionIndex}`);
     };
 
@@ -41,16 +50,20 @@ export default function Round2() {
                     <h2 className="text-lg font-semibold mb-2">{category.name}</h2>
                     {category.questions.map((question, questionIndex) => {
                         const key = `${categoryIndex}-${questionIndex}`;
-                        const isClicked = clickedQuestions[key] || false;
+                         const storedClickedQuestions = localStorage.getItem('clickedQuestionsRound2');
+                         const isClicked = storedClickedQuestions ? JSON.parse(storedClickedQuestions)[key] || false : false;
                         return (
                             <Button
                                 key={questionIndex}
-                                className={`points-button ${isClicked ? "disabled" : ""}`}
+                                className={`points-button relative ${isClicked ? "disabled" : ""}`}
                                 onClick={() => handleQuestionClick(categoryIndex, questionIndex)}
                                 disabled={isClicked}
                                 aria-label={`Вопрос за ${question.points} баллов, категория ${category.name}`}
                             >
                                 {question.points}
+                                  {isClicked && (
+                                    <Lock className="absolute top-1 right-1 text-gray-500" size={16} />
+                                )}
                             </Button>
                         );
                     })}
@@ -63,4 +76,3 @@ export default function Round2() {
     </div>
   );
 }
-

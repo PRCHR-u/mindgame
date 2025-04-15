@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { categoriesRound1 } from "@/lib/questions";
 import { useState, useEffect } from "react";
+import {Lock} from "lucide-react";
 
 export default function Round1() {
   const router = useRouter();
@@ -22,11 +23,19 @@ export default function Round1() {
         localStorage.setItem('clickedQuestionsRound1', JSON.stringify(clickedQuestions));
     }, [clickedQuestions]);
 
-  const handleQuestionClick = (categoryIndex: number, questionIndex: number) => {
-    const key = `${categoryIndex}-${questionIndex}`;
-    setClickedQuestions(prev => ({ ...prev, [key]: true }));
-    router.push(`/question?round=round1&category=${categoryIndex}&question=${questionIndex}`);
-  };
+    const handleQuestionClick = (categoryIndex: number, questionIndex: number) => {
+        const key = `${categoryIndex}-${questionIndex}`;
+        // Update state immediately
+        setClickedQuestions(prev => ({ ...prev, [key]: true }));
+
+        // Store the key in localStorage
+        let storedClickedQuestions = localStorage.getItem('clickedQuestionsRound1');
+        let clickedQuestionsRound1 = storedClickedQuestions ? JSON.parse(storedClickedQuestions) : {};
+        clickedQuestionsRound1[key] = true;
+        localStorage.setItem('clickedQuestionsRound1', JSON.stringify(clickedQuestionsRound1));
+
+        router.push(`/question?round=round1&category=${categoryIndex}&question=${questionIndex}`);
+    };
 
   const handleBack = () => {
     router.push("/roundselection");
@@ -41,16 +50,20 @@ export default function Round1() {
                     <h2 className="text-lg font-semibold mb-2">{category.name}</h2>
                     {category.questions.map((question, questionIndex) => {
                         const key = `${categoryIndex}-${questionIndex}`;
-                        const isClicked = clickedQuestions[key] || false;
+                        const storedClickedQuestions = localStorage.getItem('clickedQuestionsRound1');
+                        const isClicked = storedClickedQuestions ? JSON.parse(storedClickedQuestions)[key] || false : false;
                         return (
                             <Button
                                 key={questionIndex}
-                                className={`points-button ${isClicked ? "disabled" : ""}`}
+                                className={`points-button relative ${isClicked ? "disabled" : ""}`}
                                 onClick={() => handleQuestionClick(categoryIndex, questionIndex)}
                                 disabled={isClicked}
                                 aria-label={`Вопрос за ${question.points} баллов, категория ${category.name}`}
                             >
                                 {question.points}
+                                {isClicked && (
+                                    <Lock className="absolute top-1 right-1 text-gray-500" size={16} />
+                                )}
                             </Button>
                         );
                     })}
@@ -63,4 +76,3 @@ export default function Round1() {
     </div>
   );
 }
-

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -85,6 +86,8 @@ body {
   body {
     @apply bg-background text-foreground;
     font-family: Georgia, serif;
+    font-size: 1.2rem; /* Увеличенный размер шрифта */
+    color: #006400; /* Тёмно-зелёный цвет */
   }
 }
 
